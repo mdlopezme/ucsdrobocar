@@ -9,15 +9,18 @@ services:
     privileged: true
     network_mode: host
     # runtime: nvidia
+    ports:
+      - "5000:5000"
     devices:
-      - /dev/video0:/dev/video0
+      - /dev/bus/usb:/dev/bus/usb
     environment:
-      - DISPLAY
-      - TAG=r35.1.0
-      - NVIDIA_VISIBLE_DEVICES=all
+      DISPLAY: $DISPLAY
+      TAG: r35.1.0
+      NVIDIA_VISIBLE_DEVICES: all
     volumes:
       - /tmp/.X11-unix/:/tmp/.X11-unix
+      - ~/.Xauthority:/root/.Xauthority
+      - ./mycar:/donkeycar/mycar
     build:
       context: .
       dockerfile: Dockerfile.jetpack
-      
