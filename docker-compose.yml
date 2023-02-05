@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  jetpack:
+    image: mdlopezme/ucsdrobocar:staging
+    container_name: donkey_framework
+    stdin_open: true
+    tty: true
+    privileged: true
+    network_mode: host
+    # runtime: nvidia
+    devices:
+      - /dev/video0:/dev/video0
+    environment:
+      - DISPLAY
+      - TAG=r35.1.0
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - /tmp/.X11-unix/:/tmp/.X11-unix
+    build:
+      context: .
+      dockerfile: Dockerfile.jetpack
+      
