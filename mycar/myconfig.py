@@ -20,7 +20,7 @@
 # MAX_LOOPS = None        # the vehicle loop can abort after this many iterations, when given a positive integer.
 # 
 # #CAMERA
-CAMERA_TYPE = "MOCK"   # (PICAM|WEBCAM|CVCAM|CSIC|V4L|D435|MOCK|IMAGE_LIST)
+CAMERA_TYPE = "OAKD"   # (PICAM|WEBCAM|CVCAM|CSIC|V4L|D435|MOCK|IMAGE_LIST)
 # IMAGE_W = 160
 # IMAGE_H = 120
 # IMAGE_DEPTH = 3         # default RGB=3, make 1 for mono
@@ -218,7 +218,7 @@ DRIVE_TRAIN_TYPE = "VESC"
 # STEERING_RIGHT_PWM = 290   # pwm value for full right steering (use `donkey calibrate` to measure value for your car)
 # 
 # #VESC controller, primarily need to change VESC_SERIAL_PORT  and VESC_MAX_SPEED_PERCENT
-VESC_MAX_SPEED_PERCENT =.5  # Max speed as a percent of the actual speed
+VESC_MAX_SPEED_PERCENT =.2  # Max speed as a percent of the actual speed
 VESC_SERIAL_PORT= "/dev/ttyACM0" # Serial device to use for communication. Can check with ls /dev/tty*
 VESC_HAS_SENSOR= True # Whether or not the bldc motor is using a hall effect sensor
 VESC_START_HEARTBEAT= True # Whether or not to automatically start the heartbeat thread that will keep commands alive.
@@ -420,7 +420,7 @@ VESC_STEERING_OFFSET = 0.5 # VESC accepts steering inputs from 0 to 1. Coupled w
 USE_JOYSTICK_AS_DEFAULT = True      #when starting the manage.py, when True, will not require a --js option to use the joystick
 # JOYSTICK_MAX_THROTTLE = 0.5         #this scalar is multiplied with the -1 to 1 throttle value to limit the maximum throttle. This can help if you drop the controller or just don't need the full speed available.
 # JOYSTICK_STEERING_SCALE = 1.0       #some people want a steering that is less sensitve. This scalar is multiplied with the steering -1 to 1. It can be negative to reverse dir.
-# AUTO_RECORD_ON_THROTTLE = True      #if true, we will record whenever throttle is not zero. if false, you must manually toggle recording with some other trigger. Usually circle button on joystick.
+AUTO_RECORD_ON_THROTTLE = False      #if true, we will record whenever throttle is not zero. if false, you must manually toggle recording with some other trigger. Usually circle button on joystick.
 CONTROLLER_TYPE = 'F710'            #(ps3|ps4|xbox|pigpio_rc|nimbus|wiiu|F710|rc3|MM1|custom) custom will run the my_joystick.py controller written by the `donkey createjs` command
 # USE_NETWORKED_JS = False            #should we listen for remote joystick control over the network?
 # NETWORK_JS_SERVER_IP = None         #when listening for network joystick control, which ip is serving this information
