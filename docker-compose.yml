@@ -1,22 +1,23 @@
-version: '3.7'
+version: '2.4'
 
 services:
-  jetpack:
+  ucsd_donkeycar_framework:
     image: mdlopezme/ucsdrobocar:staging
     container_name: donkey_framework
     stdin_open: true
     tty: true
     privileged: true
     network_mode: host
+    restart: unless-stopped
     # runtime: nvidia
+    device_cgroup_rules:
+      - 'c 189:* rmw'
     ports:
       - "5000:5000"
     devices:
       - /dev/bus/usb:/dev/bus/usb
     environment:
       DISPLAY: $DISPLAY
-      TAG: r35.1.0
-      NVIDIA_VISIBLE_DEVICES: all
     volumes:
       - /tmp/.X11-unix/:/tmp/.X11-unix
       - ~/.Xauthority:/root/.Xauthority
