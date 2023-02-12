@@ -6,10 +6,9 @@ spec:
   restartPolicy: OnFailure
   containers:
   - name: donkey
-    image: mdlopezme/ucsdrobocar:staging
+    image: mdlopezme/ucsdrobocar:xavier
     securityContext:
       privileged: true
-    # command: ["/bin/sleep", "3650d"]
     volumeMounts:
     - mountPath: /dev/bus/usb
       name: usb-bus
