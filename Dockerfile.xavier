@@ -1,6 +1,7 @@
 FROM nvcr.io/nvidia/l4t-base:r35.1.0
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=noninteractive
+RUN echo "alias python=python3" >> ~/.bashrc
 
 # Setup environment variables
 ENV CUDA_HOME="/usr/local/cuda"
@@ -10,10 +11,6 @@ ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 ######## DONKEYCAR FRAMEWORK ############
 RUN apt update && apt -y install --no-install-recommends \
   ca-certificates \
-  && apt clean \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN apt update && DEBIAN_FRONTEND=noninteractive apt -y install --no-install-recommends \
   software-properties-common \
   build-essential \
   sudo \
@@ -33,20 +30,25 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt -y install --no-install-rec
   ffmpeg \
   libsm6 \
   libxext6 \
+  jstest-gtk \
+  x11-apps \
+  unzip \
   && apt clean \
   && rm -rf /var/lib/apt/lists/*
 
-
 RUN python3 -m pip install --upgrade pip
 
-RUN DEBIAN_FRONTEND=noninteractive pip3 uninstall --no-cache tensorflow && \
-    DEBIAN_FRONTEND=noninteractive pip3 install -U --no-cache install seaborn
+RUN pip3 uninstall --no-cache tensorflow && \
+    pip3 install -U --no-cache install seaborn
 
-RUN DEBIAN_FRONTEND=noninteractive pip3 install -U --no-cache install tensorflow && \
-    DEBIAN_FRONTEND=noninteractive pip3 install -U --no-cache install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu117
+RUN pip3 install -U --no-cache install tensorflow && \
+    pip3 install -U --no-cache install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu117
 
+################ PYVESC ##################
 RUN pip3 install --no-cache git+https://github.com/sisaha9/PyVESC.git@sid-devel
 
+################ DEPTHAI ##################
+WORKDIR /projects
 RUN git clone https://github.com/luxonis/depthai.git && \
     git clone https://github.com/luxonis/depthai-python.git && \
     cd depthai && \
@@ -54,20 +56,15 @@ RUN git clone https://github.com/luxonis/depthai.git && \
     python3 install_requirements.py && \
     cd ../depthai-python/examples && \
     python3 install_requirements.py 
+# RUN echo "export OPENBLAS_CORETYPE=ARMV8" >> ~/.bashrc
+# RUN echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03e7", MODE="0666"' | tee /etc/udev/rules.d/80-movidius.rules
 
-RUN echo "hello"
+################ DONKEYCAR ##################
 RUN git clone https://github.com/UCSD-ECEMAE-148/donkeycar.git && \
     cd donkeycar && \
     pip3 install -U --no-cache install -e .[pc]
 
-# RUN pip install numpy
-RUN apt install -y jstest-gtk x11-apps unzip
-
-RUN echo "export OPENBLAS_CORETYPE=ARMV8" >> ~/.bashrc
-RUN echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03e7", MODE="0666"' | tee /etc/udev/rules.d/80-movidius.rules
-
-WORKDIR /donkeycar/mycar
-
-# CMD ["/bin/python3", "/depthai-python/examples/ColorCamera/rgb_preview.py"]
-CMD ["/bin/python3", "manage.py", "drive", "--js"]
-# CMD ["/bin/bash"]
+################ FINAL ##################
+COPY ./mycar /projects/donkeycar/mycar 
+WORKDIR /projects/donkeycar/mycar
+CMD ["/bin/bash"]

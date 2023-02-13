@@ -9,7 +9,7 @@ services:
     privileged: true
     network_mode: host
     restart: unless-stopped
-    # runtime: nvidia
+    runtime: nvidia
     device_cgroup_rules:
       - 'c 189:* rmw'
     ports:
@@ -25,4 +25,4 @@ services:
       - /dev/bus/usb:/dev/bus/usb
     build:
       context: .
-      dockerfile: Dockerfile.jetpack
+      dockerfile: Dockerfile.xavier
